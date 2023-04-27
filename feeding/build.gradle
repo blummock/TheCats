@@ -40,5 +40,4 @@ dependencies {
     implementation mlibs.constraintLayout
     implementation mlibs.liveData
     kapt mlibs.daggerKapt
-    testImplementation mlibs.junit
 }

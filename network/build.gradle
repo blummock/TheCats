@@ -36,5 +36,4 @@ dependencies {
     implementation mlibs.dagger
     implementation mlibs.glide
     kapt mlibs.daggerKapt
-    testImplementation mlibs.junit
 }

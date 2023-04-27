@@ -26,11 +26,9 @@ android {
 
 dependencies {
     implementation project(':common')
-    implementation "androidx.room:room-runtime:2.4.2"
-    kapt "androidx.room:room-compiler:2.4.2"
-    implementation "androidx.room:room-ktx:2.4.2"
+    implementation mlibs.roomRruntime
+    kapt mlibs.roomKapt
+    implementation mlibs.roomKotlin
     implementation mlibs.dagger
     kapt mlibs.daggerKapt
-
-    testImplementation mlibs.junit
 }

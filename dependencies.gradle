@@ -7,6 +7,7 @@ ext {
     liveDataVersion = "2.6.1"
     retrofitVersion = "2.9.0"
     okhttpVersion = "4.9.0"
+    roomVersion = "2.4.2"
 
 
     mlibs = [
@@ -34,6 +35,9 @@ ext {
             coroutines        : "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4",
             splash            : "androidx.core:core-splashscreen:1.0.0",
             glide             : "com.github.bumptech.glide:glide:4.13.2",
-            recycler          : "androidx.recyclerview:recyclerview:1.2.0"
+            recycler          : "androidx.recyclerview:recyclerview:1.2.0",
+            roomRruntime      : "androidx.room:room-runtime:$roomVersion",
+            roomKapt          : "androidx.room:room-compiler:$roomVersion",
+            roomKotlin        : "androidx.room:room-ktx:$roomVersion"
     ]
 }
