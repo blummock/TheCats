@@ -1,0 +1,44 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+
+apply from: '../dependencies.gradle'
+
+android {
+    namespace 'com.blumock.feeding'
+    compileSdk androidSdkVersion
+
+    defaultConfig {
+        minSdk androidMinSdkVersion
+        targetSdk androidSdkVersion
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+
+    implementation project(':common')
+    implementation mlibs.kotlinCore
+    implementation mlibs.paging
+    implementation mlibs.lifecycle
+    implementation mlibs.appCompat
+    implementation mlibs.dagger
+    implementation mlibs.viewModel
+    implementation mlibs.navigationFragment
+    implementation mlibs.material
+    implementation mlibs.constraintLayout
+    implementation mlibs.liveData
+    kapt mlibs.daggerKapt
+    testImplementation mlibs.junit
+}
