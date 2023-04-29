@@ -21,14 +21,12 @@ class MainActivity : AppCompatActivity(), AbstractActivity {
         .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
         component = DaggerActivityComponent.builder()
             .databaseComponent((application as App).databaseComponent)
             .networkComponent((application as App).networkComponent)
             .build()
-
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, FeedingFragment.newInstance())
