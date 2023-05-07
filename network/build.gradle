@@ -27,6 +27,7 @@ android {
 dependencies {
 
     implementation project(":common")
+    implementation project(":domain")
     implementation mlibs.retrofit
     implementation mlibs.okHttp
     implementation mlibs.okHttpInterceptor

@@ -1,19 +1,20 @@
 package com.blumock.favorites.ui
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.blumock.domain.models.FavoriteCatEntity
 import com.blumock.favorites.databinding.FavoritesItemCardBinding
 import com.blumock.favorites.di.DaggerFavoritesComponent
 import com.blumock.thecat.activity.AbstractActivity
-import com.blumock.thecat.data.CatsItem
-import com.blumock.thecat.recycler.CatsItemDiffUtil
 import com.blumock.thecat.recycler.Decorator
 import com.blumock.thecat.view_model.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
@@ -70,13 +71,13 @@ class FavoritesFragment : Fragment() {
 
     private class CatsItemHolder(private val binding: FavoritesItemCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CatsItem) {
-            item.image?.let { binding.image.setImageBitmap(it) }
+        fun bind(item: FavoriteCatEntity) {
+            binding.image.setImageDrawable(Drawable.createFromPath(item.image))
+//            item.image?.let { binding.image.setImageBitmap(it) }
         }
     }
 
-    private class FavoritesAdapter :
-        ListAdapter<CatsItem, CatsItemHolder>(CatsItemDiffUtil()) {
+    private class FavoritesAdapter : ListAdapter<FavoriteCatEntity, CatsItemHolder>(ItemDiffUtil()) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatsItemHolder {
             return CatsItemHolder(
@@ -89,6 +90,17 @@ class FavoritesFragment : Fragment() {
 
         override fun onBindViewHolder(holder: CatsItemHolder, position: Int) {
             getItem(position)?.let { holder.bind(it) }
+        }
+    }
+
+    class ItemDiffUtil : DiffUtil.ItemCallback<FavoriteCatEntity>() {
+
+        override fun areItemsTheSame(oldItem: FavoriteCatEntity, newItem: FavoriteCatEntity): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: FavoriteCatEntity, newItem: FavoriteCatEntity): Boolean {
+            return oldItem == newItem
         }
     }
 }

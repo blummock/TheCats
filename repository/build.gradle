@@ -28,8 +28,10 @@ dependencies {
     implementation project(':common')
     implementation project(':network')
     implementation project(':database')
+    implementation project(':domain')
     implementation mlibs.coroutines
     implementation mlibs.dagger
+    implementation mlibs.glide
     kapt mlibs.daggerKapt
 
 }

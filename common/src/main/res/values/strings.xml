@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">TheCats</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="in_favorites">Great! Image in Favorites!</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="download_dialog_message">Download to Gallery?</string>
+    <string name="download_title">Downloading %s</string>
+    <string name="download_notification">Downloading ..</string>
 </resources>

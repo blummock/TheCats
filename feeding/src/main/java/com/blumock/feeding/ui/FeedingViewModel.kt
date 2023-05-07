@@ -3,53 +3,71 @@ package com.blumock.feeding.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
-import com.blumock.feeding.R
-import com.blumock.thecat.data.CatsItem
-import com.blumock.thecat.use_cases.CatsUseCase
-import com.blumock.thecat.use_cases.FetchParams
-import com.blumock.thecat.use_cases.SaveFavoritesUseCase
+import com.blumock.domain.models.CatEntity
+import com.blumock.domain.models.GetCatsArgs
+import com.blumock.domain.usecases.UseCase
+import com.blumock.feeding.recycler.CatItemModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 class FeedingViewModel @Inject constructor(
-    private val useCases: CatsUseCase,
-    private val saveFavoritesUseCase: SaveFavoritesUseCase
+    private val getImageUseCase: UseCase<String, File>,
+    private val downloadImageUseCase: UseCase<String, Unit>,
+    private val saveToFavoritesUseCase: UseCase<Pair<String, File>, Unit>,
+    private val getCatsUseCase: UseCase<GetCatsArgs, Result<List<CatEntity>>>
 ) : ViewModel() {
 
     private val _messages = MutableSharedFlow<Message>()
     val messages = _messages.asSharedFlow()
 
-
     val cats = Pager(
         config = PagingConfig(
-            pageSize = 10,
+            pageSize = 3,
         ),
         pagingSourceFactory = {
-            CatsPaging(useCases = useCases, _messages)
+            CatsPaging(getCatsUseCase = getCatsUseCase, _messages)
         }
     ).flow
+        .map {
+            it.map { item ->
+                CatItemModel(id = item.id, url = item.url, isFavorite = false, getImageUseCase = getImageUseCase)
+            }
+        }
         .cachedIn(viewModelScope)
 
-    fun saveToFavorites(catsItem: CatsItem) {
+    fun saveToFavorites(pair: Pair<String, File>) {
         viewModelScope.launch {
-            saveFavoritesUseCase.save(catsItem)
-            _messages.emit(Message.Res(R.string.in_favorites))
+            saveToFavoritesUseCase(pair)
+            _messages.emit(Message.Res(com.blumock.common.R.string.in_favorites))
         }
     }
 
-    private class CatsPaging(private val useCases: CatsUseCase, private val errors: MutableSharedFlow<Message>) :
-        PagingSource<Int, CatsItem>() {
+    fun download(url: String) {
+        viewModelScope.launch {
+            downloadImageUseCase(url)
+        }
+    }
 
-        override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CatsItem> {
+    private class CatsPaging(
+        private val getCatsUseCase: UseCase<GetCatsArgs, Result<List<CatEntity>>>,
+        private val errors: MutableSharedFlow<Message>
+    ) :
+        PagingSource<Int, CatEntity>() {
+
+        override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CatEntity> {
             val nextPageNumber = params.key ?: 0
-
-            return useCases.fetch(FetchParams(limit = 10, page = nextPageNumber)).fold({
+            val itemsSize = params.loadSize + 1
+            return getCatsUseCase(GetCatsArgs(limit = itemsSize, page = nextPageNumber)).fold({
                 LoadResult.Page(
                     data = it,
                     prevKey = null, // Only paging forward.
-                    nextKey = nextPageNumber + 1
+                    nextKey = nextPageNumber + 1,
+                    itemsBefore = nextPageNumber * nextPageNumber,
+                    itemsAfter = itemsSize
                 )
             }, { e ->
                 errors.emit(e.message?.let { Message.Text(it) }
@@ -58,7 +76,7 @@ class FeedingViewModel @Inject constructor(
             })
         }
 
-        override fun getRefreshKey(state: PagingState<Int, CatsItem>): Int {
+        override fun getRefreshKey(state: PagingState<Int, CatEntity>): Int {
             return 0
         }
     }

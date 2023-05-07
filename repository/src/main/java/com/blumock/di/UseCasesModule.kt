@@ -1,27 +1,34 @@
 package com.blumock.di
 
+import com.blumock.domain.models.CatEntity
+import com.blumock.domain.models.FavoriteCatEntity
+import com.blumock.domain.models.GetCatsArgs
+import com.blumock.domain.usecases.*
 import com.blumock.thecat.di.scope.ViewModelScope
-import com.blumock.thecat.use_cases.CatsUseCase
-import com.blumock.thecat.use_cases.FavoritesUseCase
-import com.blumock.thecat.use_cases.SaveFavoritesUseCase
-import com.blumock.use_cases.CatsUseCaseImpl
-import com.blumock.use_cases.FavoritesUseCaseImpl
-import com.blumock.use_cases.SaveFavoritesUseCaseImpl
 import dagger.Binds
 import dagger.Module
+import java.io.File
 
 @Module
 interface UseCasesModule {
 
     @Binds
     @ViewModelScope
-    fun provideCatsUseCase(useCase: CatsUseCaseImpl): CatsUseCase
+    fun provideGetCatsUseCase(useCase: GetCatsUseCase): UseCase<GetCatsArgs, Result<List<CatEntity>>>
 
     @Binds
     @ViewModelScope
-    fun provideFavoritesUseCase(useCase: FavoritesUseCaseImpl): FavoritesUseCase
+    fun provideGetFavoritesUseCase(useCase: GetFavoritesUseCase): UseCase<Unit, Result<List<FavoriteCatEntity>>>
 
     @Binds
     @ViewModelScope
-    fun provideSaveFavoritesUseCase(useCase: SaveFavoritesUseCaseImpl): SaveFavoritesUseCase
+    fun provideSaveFavoritesUseCase(useCase: SaveToFavoritesUseCase): UseCase<Pair<String, File>, Unit>
+
+    @Binds
+    @ViewModelScope
+    fun provideDownloadImageUseCase(useCase: DownloadImageUseCase): UseCase<String, Unit>
+
+    @Binds
+    @ViewModelScope
+    fun provideGetImageUseCase(useCase: DownloadPreviewUseCase): UseCase<String, File>
 }

@@ -4,29 +4,26 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.blumock.thecat.data.CatsItem
-import com.blumock.thecat.use_cases.FavoritesUseCase
+import com.blumock.domain.models.FavoriteCatEntity
+import com.blumock.domain.usecases.UseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class FavoritesViewModel @Inject constructor(
-    favoritesUseCase: FavoritesUseCase
+    getFavoritesUseCase: UseCase<Unit, Result<List<FavoriteCatEntity>>>
 ) : ViewModel() {
 
-    private val _favorites = MutableLiveData<List<CatsItem>>()
-    val favorites: LiveData<List<CatsItem>> = _favorites
+    private val _favorites = MutableLiveData<List<FavoriteCatEntity>>()
+    val favorites: LiveData<List<FavoriteCatEntity>> = _favorites
 
     private val _errors = MutableLiveData<String>()
     val errors: LiveData<String> = _errors
 
     init {
         viewModelScope.launch {
-            favoritesUseCase.fetch().onSuccess {
-                _favorites.postValue(it)
-            }.onFailure {
-                _errors.postValue(it.message)
-            }
+            getFavoritesUseCase(Unit)
+                .onSuccess { _favorites.postValue(it) }
+                .onFailure { _errors.postValue(it.message) }
         }
     }
-
 }

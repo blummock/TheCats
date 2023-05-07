@@ -29,6 +29,7 @@ android {
 dependencies {
 
     implementation project(':common')
+    implementation project(':domain')
     implementation mlibs.kotlinCore
     implementation mlibs.paging
     implementation mlibs.lifecycle

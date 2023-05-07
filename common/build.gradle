@@ -24,6 +24,7 @@ android {
 }
 
 dependencies {
+    implementation project(':domain')
     implementation mlibs.viewModel
     implementation mlibs.dagger
     implementation mlibs.recycler

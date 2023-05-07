@@ -51,4 +51,8 @@ class MainActivity : AppCompatActivity(), AbstractActivity {
         }
         return false
     }
+
+    override fun onRetainCustomNonConfigurationInstance(): Any? {
+        return super.onRetainCustomNonConfigurationInstance()
+    }
 }
