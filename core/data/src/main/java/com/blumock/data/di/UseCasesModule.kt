@@ -19,15 +19,16 @@ class UseCasesModule {
 
     @Provides
     @FragmentScope
-    fun provideGetCatsUseCase(
-        catsRepository: CatsRepository
-    ): UseCase<GetCatsArgs, Result<List<CatModel>>> = GetCatsUseCase(catsRepository)
-
-    @Provides
-    @FragmentScope
     fun provideGetFavoritesUseCase(
         favoritesRepository: FavoritesRepository
     ): UseCase<Unit, Result<List<FavoriteCatModel>>> = GetFavoritesUseCase(favoritesRepository)
+
+    @Provides
+    @FragmentScope
+    fun provideGetCatsUseCase(
+        favoritesRepository: FavoritesRepository,
+        catsRepository: CatsRepository
+    ): UseCase<GetCatsArgs, Result<List<CatModel>>> = GetCatsUseCase(catsRepository, favoritesRepository)
 
     @Provides
     @FragmentScope

@@ -74,7 +74,6 @@ class FavoritesFragment : Fragment() {
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FavoriteCatModel) {
             binding.image.setImageDrawable(Drawable.createFromPath(item.image))
-//            item.image?.let { binding.image.setImageBitmap(it) }
         }
     }
 

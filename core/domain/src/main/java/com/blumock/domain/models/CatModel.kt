@@ -4,5 +4,6 @@ data class CatModel(
     val id: String,
     val url: String,
     val with: Int,
-    val height: Int
+    val height: Int,
+    val isFavorite: Boolean
 )

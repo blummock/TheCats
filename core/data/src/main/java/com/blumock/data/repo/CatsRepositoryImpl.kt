@@ -30,7 +30,8 @@ class CatsRepositoryImpl @Inject constructor(
                     it.id,
                     it.url,
                     it.width,
-                    it.height
+                    it.height,
+                    false
                 )
             }
     }

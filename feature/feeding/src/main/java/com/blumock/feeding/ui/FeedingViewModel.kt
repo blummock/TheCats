@@ -36,7 +36,12 @@ class FeedingViewModel @Inject constructor(
     ).flow
         .map {
             it.map { item ->
-                CatItemModel(id = item.id, url = item.url, isFavorite = false, getImageUseCase = getImageUseCase)
+                CatItemModel(
+                    id = item.id,
+                    url = item.url,
+                    isFavorite = item.isFavorite,
+                    getImageUseCase = getImageUseCase
+                )
             }
         }
         .cachedIn(viewModelScope)
