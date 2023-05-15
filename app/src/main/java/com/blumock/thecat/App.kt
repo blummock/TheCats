@@ -1,30 +1,18 @@
 package com.blumock.thecat
 
 import android.app.Application
-import com.blumock.database.di.DaggerDatabaseComponent
-import com.blumock.database.di.DatabaseComponent
-import com.blumock.network.di.DaggerNetworkComponent
-import com.blumock.network.di.NetworkComponent
-import com.blumock.thecat.di.DaggerAppComponent
+import com.blumock.api.di.AbstractRepositoryComponent
+import com.blumock.data.di.RepositoryComponent
+import com.blumock.platform.di.PlatformComponent
+import com.blumock.thecat.di.AppComponent
 
 class App : Application() {
 
-    lateinit var networkComponent: NetworkComponent
-        private set
-
-    lateinit var databaseComponent: DatabaseComponent
+    lateinit var component: AbstractRepositoryComponent
         private set
 
     override fun onCreate() {
         super.onCreate()
-        val appComponent = DaggerAppComponent.builder()
-            .context(this)
-            .build()
-        networkComponent = DaggerNetworkComponent.builder()
-            .abstractAppComponent(appComponent)
-            .build()
-        databaseComponent = DaggerDatabaseComponent.builder()
-            .abstractAppComponent(appComponent)
-            .build()
+        component = RepositoryComponent.create(PlatformComponent.create(AppComponent.create(this)))
     }
 }

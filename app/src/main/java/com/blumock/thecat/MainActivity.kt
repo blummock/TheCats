@@ -4,27 +4,21 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.blumock.api.activity.AbstractActivity
+import com.blumock.api.di.AbstractRepositoryComponent
+import com.blumock.data.di.UseCaseComponent
 import com.blumock.favorites.ui.FavoritesFragment
 import com.blumock.feeding.ui.FeedingFragment
-import com.blumock.thecat.activity.AbstractActivity
-import com.blumock.thecat.di.AbstractUseCasesComponent
 import com.blumock.thecat.di.ActivityComponent
-import com.blumock.thecat.di.DaggerActivityComponent
-import com.blumock.thecat.di.DaggerUseCasesComponent
 
 class MainActivity : AppCompatActivity(), AbstractActivity {
 
-    private lateinit var component: ActivityComponent
+    private lateinit var activityComponent: AbstractRepositoryComponent
 
-    override fun getComponent(): AbstractUseCasesComponent = DaggerUseCasesComponent.builder()
-        .activityComponent(component)
-        .build()
+    override fun getComponent() = UseCaseComponent.create(activityComponent)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        component = DaggerActivityComponent.builder()
-            .databaseComponent((application as App).databaseComponent)
-            .networkComponent((application as App).networkComponent)
-            .build()
+        activityComponent = ActivityComponent.create((application as App).component)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
@@ -50,9 +44,5 @@ class MainActivity : AppCompatActivity(), AbstractActivity {
             return true
         }
         return false
-    }
-
-    override fun onRetainCustomNonConfigurationInstance(): Any? {
-        return super.onRetainCustomNonConfigurationInstance()
     }
 }

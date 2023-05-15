@@ -1,22 +1,20 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
 }
 
-apply from: '../dependencies.gradle'
+apply from: '../../dependencies.gradle'
 
 android {
-    namespace 'com.blumock.thecat'
+    namespace 'com.blumock.platform'
     compileSdk androidSdkVersion
 
     defaultConfig {
-        applicationId "com.blumock.thecat"
         minSdk androidMinSdkVersion
         targetSdk androidSdkVersion
-        versionCode 1
-        versionName "1.0"
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -27,12 +25,12 @@ android {
 }
 
 dependencies {
+
     implementation project(':core:api')
-    implementation project(':core:data')
-    implementation project(':core:platform')
-    implementation project(':feature:feeding')
-    implementation project(':feature:favorites')
+    implementation project(':core:common')
     implementation mlibs.dagger
-    implementation mlibs.appCompat
+    implementation mlibs.glide
+    implementation mlibs.coroutines
+
     kapt mlibs.daggerKapt
 }

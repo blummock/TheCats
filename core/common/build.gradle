@@ -1,0 +1,39 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+apply from: '../../dependencies.gradle'
+
+android {
+    namespace 'com.blumock.common'
+    compileSdk androidSdkVersion
+
+    defaultConfig {
+        minSdk androidMinSdkVersion
+        targetSdk androidSdkVersion
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    api mlibs.coroutines
+    api mlibs.viewModel
+    api mlibs.dagger
+    api mlibs.recycler
+    api mlibs.paging
+    api mlibs.lifecycle
+    api mlibs.appCompat
+    api mlibs.navigationFragment
+    api mlibs.material
+    api mlibs.constraintLayout
+    api mlibs.liveData
+    api mlibs.dagger
+}

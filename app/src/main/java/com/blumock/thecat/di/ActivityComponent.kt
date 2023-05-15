@@ -1,18 +1,18 @@
 package com.blumock.thecat.di
 
-import android.content.Context
-import com.blumock.database.dao.FavoritesDaoRoom
-import com.blumock.database.di.DatabaseComponent
-import com.blumock.network.NetApi
-import com.blumock.network.di.NetworkComponent
-import com.blumock.thecat.di.scope.ActivityScope
+import com.blumock.api.di.AbstractActivityComponent
+import com.blumock.api.di.AbstractRepositoryComponent
+import com.blumock.api.di.ActivityScope
 import dagger.Component
 
-@Component(dependencies = [NetworkComponent::class, DatabaseComponent::class])
+@Component(dependencies = [AbstractRepositoryComponent::class])
 @ActivityScope
-interface ActivityComponent {
+interface ActivityComponent : AbstractActivityComponent {
 
-    fun provideApi(): NetApi
-    fun provideContext(): Context
-    fun provideDao(): FavoritesDaoRoom
+    companion object {
+        fun create(repository: AbstractRepositoryComponent) = DaggerActivityComponent
+            .builder()
+            .abstractRepositoryComponent(repository)
+            .build()
+    }
 }

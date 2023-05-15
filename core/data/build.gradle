@@ -1,0 +1,48 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+
+apply from: '../../dependencies.gradle'
+
+android {
+    namespace 'com.blumock.data'
+    compileSdk androidSdkVersion
+
+    defaultConfig {
+        minSdk androidMinSdkVersion
+        targetSdk androidSdkVersion
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation project(':core:api')
+    implementation mlibs.dagger
+
+    implementation mlibs.retrofit
+    implementation mlibs.okHttp
+    implementation mlibs.okHttpInterceptor
+    implementation mlibs.gson
+    implementation mlibs.gsonConverter
+    implementation mlibs.kotlinCore
+    kapt mlibs.daggerKapt
+
+    implementation mlibs.roomRruntime
+    kapt mlibs.roomKapt
+    implementation mlibs.roomKotlin
+}

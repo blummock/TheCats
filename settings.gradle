@@ -14,10 +14,10 @@ dependencyResolutionManagement {
 }
 rootProject.name = "TheCat"
 include ':app'
-include ':feeding'
-include ':common'
-include ':network'
-include ':database'
-include ':favorites'
-include ':repository'
-include ':domain'
+include ':core:data'
+include ':core:api'
+include ':core:domain'
+include ':core:platform'
+include ':core:common'
+include ':feature:feeding'
+include ':feature:favorites'
