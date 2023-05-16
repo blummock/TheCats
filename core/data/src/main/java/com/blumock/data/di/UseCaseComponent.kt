@@ -16,6 +16,6 @@ interface UseCaseComponent : AbstractUseCasesComponent {
         fun create(repositoryComponent: AbstractRepositoryComponent) = DaggerUseCaseComponent
             .builder()
             .abstractRepositoryComponent(repositoryComponent)
-            .build()
+            .build()!!
     }
 }

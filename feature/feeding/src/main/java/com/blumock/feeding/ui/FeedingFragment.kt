@@ -8,11 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.blumock.api.activity.AbstractActivity
+import com.blumock.common.databinding.FragmentRecyclerBinding
 import com.blumock.common.recycler.Decorator
 import com.blumock.common.view_model.ViewModelFactory
 import com.blumock.feeding.di.FeedingComponent
@@ -26,6 +27,7 @@ class FeedingFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+    lateinit var binding: FragmentRecyclerBinding
 
     private val viewModel by viewModels<FeedingViewModel> {
         viewModelFactory
@@ -47,11 +49,20 @@ class FeedingFragment : Fragment() {
         super.onCreate(savedInstanceState)
         adapter = FeedRecyclerAdapter(lifecycle, viewModel, DownloadDialog(requireContext()))
         lifecycleScope.launch {
-            viewModel.cats
-                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                .collect {
-                    adapter.submitData(it)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.loading
+                        .collect {
+                            (requireActivity() as AbstractActivity).progressIndicator(it)
+                        }
                 }
+                launch {
+                    viewModel.cats
+                        .collect {
+                            adapter.submitData(it)
+                        }
+                }
+            }
         }
     }
 
@@ -59,7 +70,7 @@ class FeedingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(com.blumock.common.R.layout.fragment_recycler, container, false)
+        return FragmentRecyclerBinding.inflate(inflater, container, false).also { binding = it }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

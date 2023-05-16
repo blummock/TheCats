@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.blumock.api.activity.AbstractActivity
+import com.blumock.common.databinding.FragmentRecyclerBinding
 import com.blumock.common.view_model.ViewModelFactory
 import com.blumock.domain.models.FavoriteCatModel
 import com.blumock.favorites.databinding.FavoritesItemCardBinding
@@ -24,6 +25,7 @@ class FavoritesFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+    lateinit var binding: FragmentRecyclerBinding
 
     private val viewModel by viewModels<FavoritesViewModel> {
         viewModelFactory
@@ -49,7 +51,7 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(com.blumock.common.R.layout.fragment_recycler, container, false)
+        return FragmentRecyclerBinding.inflate(inflater, container, false).also { binding = it }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,6 +62,9 @@ class FavoritesFragment : Fragment() {
         }
         viewModel.favorites.observe(viewLifecycleOwner) {
             favoritesAdapter.submitList(it)
+        }
+        viewModel.loading.observe(viewLifecycleOwner) {
+            (requireActivity() as AbstractActivity).progressIndicator(false)
         }
         viewModel.errors.observe(viewLifecycleOwner) {
             Snackbar.make(

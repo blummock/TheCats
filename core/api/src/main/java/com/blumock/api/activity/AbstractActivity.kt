@@ -5,4 +5,5 @@ import com.blumock.api.di.AbstractUseCasesComponent
 interface AbstractActivity {
 
     fun getComponent(): AbstractUseCasesComponent
+    fun progressIndicator(show: Boolean)
 }

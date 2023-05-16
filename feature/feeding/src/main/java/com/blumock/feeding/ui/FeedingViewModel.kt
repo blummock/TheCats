@@ -9,6 +9,7 @@ import com.blumock.domain.models.GetCatsArgs
 import com.blumock.domain.usecases.UseCase
 import com.blumock.feeding.recycler.CatItemModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -26,12 +27,15 @@ class FeedingViewModel @Inject constructor(
     private val _messages = MutableSharedFlow<Message>()
     val messages = _messages.asSharedFlow()
 
+    private val _loading = MutableStateFlow(false)
+    val loading: MutableStateFlow<Boolean> = _loading
+
     val cats = Pager(
         config = PagingConfig(
             pageSize = 3,
         ),
         pagingSourceFactory = {
-            CatsPaging(getCatsUseCase = getCatsUseCase, _messages)
+            CatsPaging(getCatsUseCase = getCatsUseCase, _messages, loading)
         }
     ).flow
         .map {
@@ -61,14 +65,17 @@ class FeedingViewModel @Inject constructor(
 
     private class CatsPaging(
         private val getCatsUseCase: UseCase<GetCatsArgs, Result<List<CatModel>>>,
-        private val errors: MutableSharedFlow<Message>
+        private val errors: MutableSharedFlow<Message>,
+        private val loading: MutableSharedFlow<Boolean>
     ) :
         PagingSource<Int, CatModel>() {
 
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CatModel> {
             val nextPageNumber = params.key ?: 0
             val itemsSize = params.loadSize + 1
+            loading.emit(true)
             return getCatsUseCase(GetCatsArgs(limit = itemsSize, page = nextPageNumber)).fold({
+                loading.emit(false)
                 LoadResult.Page(
                     data = it,
                     prevKey = null, // Only paging forward.
@@ -77,6 +84,7 @@ class FeedingViewModel @Inject constructor(
                     itemsAfter = itemsSize
                 )
             }, { e ->
+                loading.emit(false)
                 errors.emit(e.message?.let { Message.Text(it) }
                     ?: Message.Res(com.blumock.common.R.string.unknown_error))
                 LoadResult.Error(e)

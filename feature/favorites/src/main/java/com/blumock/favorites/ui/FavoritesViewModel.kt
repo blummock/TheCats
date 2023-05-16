@@ -18,14 +18,24 @@ class FavoritesViewModel @Inject constructor(
     private val _favorites = MutableLiveData<List<FavoriteCatModel>>()
     val favorites: LiveData<List<FavoriteCatModel>> = _favorites
 
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> = _loading
+
     private val _errors = MutableLiveData<String>()
     val errors: LiveData<String> = _errors
 
     init {
         viewModelScope.launch {
+            _loading.postValue(true)
             getFavoritesUseCase(Unit)
-                .onSuccess { _favorites.postValue(it) }
-                .onFailure { _errors.postValue(it.message) }
+                .onSuccess {
+                    _favorites.postValue(it)
+                    _loading.postValue(false)
+                }
+                .onFailure {
+                    _errors.postValue(it.message)
+                    _loading.postValue(false)
+                }
         }
     }
 }

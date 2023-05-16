@@ -16,10 +16,10 @@ class DownloadDialog(private val context: Context) {
                 a.cancel()
             }
             setNegativeButton(context.getString(com.blumock.common.R.string.no)) { a, _ ->
+                it.resume(false)
                 a.cancel()
             }
             show()
         }
-        it.resume(false)
     }
 }
