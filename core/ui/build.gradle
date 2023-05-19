@@ -1,19 +1,19 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
 }
 
 apply from: '../../dependencies.gradle'
 
 android {
-    namespace 'com.blumock.feeding'
+    namespace 'com.blumock.ui'
     compileSdk androidSdkVersion
 
     defaultConfig {
         minSdk androidMinSdkVersion
         targetSdk androidSdkVersion
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -27,8 +27,16 @@ android {
 }
 
 dependencies {
-    implementation project(':core:api')
-    implementation project(':core:ui')
-    implementation project(':core:common')
-    kapt mlibs.daggerKapt
+    api mlibs.coroutines
+    api mlibs.viewModel
+    api mlibs.dagger
+    api mlibs.recycler
+    api mlibs.paging
+    api mlibs.lifecycle
+    api mlibs.appCompat
+    api mlibs.navigationFragment
+    api mlibs.material
+    api mlibs.constraintLayout
+    api mlibs.liveData
+    api mlibs.dagger
 }

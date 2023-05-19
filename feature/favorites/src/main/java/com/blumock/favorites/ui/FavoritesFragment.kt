@@ -13,11 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.blumock.api.activity.AbstractActivity
-import com.blumock.common.databinding.FragmentRecyclerBinding
-import com.blumock.common.view_model.ViewModelFactory
 import com.blumock.domain.models.FavoriteCatModel
 import com.blumock.favorites.databinding.FavoritesItemCardBinding
 import com.blumock.favorites.di.FavoritesComponent
+import com.blumock.ui.databinding.FragmentRecyclerBinding
+import com.blumock.ui.view_model.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
@@ -55,10 +55,10 @@ class FavoritesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        view.findViewById<RecyclerView>(com.blumock.common.R.id.recycler).apply {
+        view.findViewById<RecyclerView>(com.blumock.ui.R.id.recycler).apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = favoritesAdapter
-            addItemDecoration(com.blumock.common.recycler.Decorator(2))
+            addItemDecoration(com.blumock.ui.recycler.Decorator(2))
         }
         viewModel.favorites.observe(viewLifecycleOwner) {
             favoritesAdapter.submitList(it)

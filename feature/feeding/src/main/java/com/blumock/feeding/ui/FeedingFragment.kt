@@ -13,12 +13,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.blumock.api.activity.AbstractActivity
-import com.blumock.common.databinding.FragmentRecyclerBinding
-import com.blumock.common.recycler.Decorator
-import com.blumock.common.view_model.ViewModelFactory
 import com.blumock.feeding.di.FeedingComponent
 import com.blumock.feeding.recycler.DownloadDialog
 import com.blumock.feeding.recycler.FeedRecyclerAdapter
+import com.blumock.ui.databinding.FragmentRecyclerBinding
+import com.blumock.ui.recycler.Decorator
+import com.blumock.ui.view_model.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -74,7 +74,7 @@ class FeedingFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        view.findViewById<RecyclerView>(com.blumock.common.R.id.recycler).apply {
+        view.findViewById<RecyclerView>(com.blumock.ui.R.id.recycler).apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = this@FeedingFragment.adapter
             addItemDecoration(Decorator(2))

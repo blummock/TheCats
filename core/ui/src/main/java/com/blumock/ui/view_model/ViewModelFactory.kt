@@ -1,4 +1,4 @@
-package com.blumock.common.view_model
+package com.blumock.ui.view_model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

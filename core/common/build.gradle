@@ -21,22 +21,8 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures {
-        viewBinding true
-    }
-}
 
-dependencies {
-    api mlibs.coroutines
-    api mlibs.viewModel
-    api mlibs.dagger
-    api mlibs.recycler
-    api mlibs.paging
-    api mlibs.lifecycle
-    api mlibs.appCompat
-    api mlibs.navigationFragment
-    api mlibs.material
-    api mlibs.constraintLayout
-    api mlibs.liveData
-    api mlibs.dagger
+    dependencies {
+        api mlibs.navigationFragment
+    }
 }

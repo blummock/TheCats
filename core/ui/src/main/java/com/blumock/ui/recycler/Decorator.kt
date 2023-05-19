@@ -1,4 +1,4 @@
-package com.blumock.common.recycler
+package com.blumock.ui.recycler
 
 import android.graphics.Rect
 import android.view.View

@@ -30,7 +30,6 @@ dependencies {
     implementation project(':core:api')
     implementation project(':core:data')
     implementation project(':core:platform')
-    implementation project(':core:common')
     implementation project(':feature:feeding')
     implementation project(':feature:favorites')
     implementation mlibs.dagger
